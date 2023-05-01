@@ -2,7 +2,9 @@
 A simple CRUD for a Person-cluster with employees and customers.
 ## DBManager
 Manager for the MongoDB described in mongodb.config, takes string dbName and string collectionName as inputs to decide which db and collection to manage.
-Explanation for the public methods and calls to collection.
+Uses ConfigManager to read connection information from mongodb.config (see mongodb.config.example for example). Fallbacks to localhost.
+
+Explanation for the public methods and calls to collection:
 ### create(Document)
 takes document as input and inserts into collection
 ### read(String id)
@@ -16,10 +18,11 @@ takes string field and string term and returns Document[] based on field and ter
 ### getAll
 returns Document[] of all documents in collection
 ### update(String id, Document document)
-Takes string id and document and uptades based on id (removes "_id" from document if it has it to not make duplicates).
+Takes string id and document and updates based on id (removes "_id" from document if it has it to not make duplicates).
 
 ## PersonService
 Business-logic service for Person, Employee and Customer. Uses DBManager with people-collection.
+
 Explanation of public methods:
 ### addPerson(Person person)
 Takes person-object as input and adds to database. Checks if the object is customer or employee and inserts relevant info.

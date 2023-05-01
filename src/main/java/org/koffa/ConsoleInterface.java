@@ -30,7 +30,6 @@ public class ConsoleInterface {
             case 5 -> running = false;
         }
     }
-
     private void searchPeople() {
         System.out.println("""
                 1. Search by name\s
@@ -140,21 +139,6 @@ public class ConsoleInterface {
         System.out.println(prompt);
         return sc.nextLine();
     }
-    private void updateAdress(Person person) {
-        personService.updateAdress(person, takeStringInput("Enter adress:"));
-    }
-    private void updateAge(Person person) {
-        personService.updateAge(person, takeIntInput(1, 150, "Enter age (0-150):"));
-    }
-    private void updateCustomerNumber(Customer customer) {
-        personService.updateCustomerNumber(customer, takeIntInput(0, Integer.MAX_VALUE, "Enter customer number:"));
-    }
-    private void updateEmployeeNumber(Employee employee) {
-        personService.updateEmployeeNumber(employee, takeIntInput(0, Integer.MAX_VALUE, "Enter employee number:"));
-    }
-    private void updateName(Person person) {
-        personService.updateName(person, takeStringInput("Enter new name:"));
-    }
     private void updatePerson(Person person) {
         System.out.println("""
                 What do you want to edit\s
@@ -176,15 +160,15 @@ public class ConsoleInterface {
         if(choice == max) printMainMenu();
         else {
             switch (choice) {
-                case 1 -> updateName(person);
-                case 2 -> updateAge(person);
-                case 3 -> updateAdress(person);
+                case 1 -> personService.updateName(person, takeStringInput("Enter new name:"));
+                case 2 -> personService.updateAge(person, takeIntInput(1, 150, "Enter age (0-150):"));
+                case 3 -> personService.updateAdress(person, takeStringInput("Enter new adress:"));
                 case 4 -> {
                     if(person instanceof Customer) {
-                        updateCustomerNumber((Customer) person);
+                        personService.updateCustomerNumber((Customer) person, takeIntInput(0, Integer.MAX_VALUE, "Enter customer number:"));
                     }
                     else if (person instanceof Employee) {
-                        updateEmployeeNumber((Employee) person);
+                        personService.updateEmployeeNumber((Employee) person, takeIntInput(0, Integer.MAX_VALUE, "Enter employee number:"));
                     }
                     else {
                         System.err.println("Whoopsie, the object was neither a customer nor a employee, nothing to update!");
@@ -192,10 +176,6 @@ public class ConsoleInterface {
                 }
             }
         }
-    }
-    private void viewAllPeople() {
-        Person[] people = personService.getAllPersons();
-        showPeople(people);
     }
 
     private void showPeople(Person[] people) {
@@ -212,16 +192,6 @@ public class ConsoleInterface {
         }
     }
 
-    private void viewCustomers() {
-        Customer[] customers = personService.getAllCustomers();
-        showPeople(customers);
-    }
-
-    private void viewEmployees() {
-        Employee[] employees = personService.getAllEmployees();
-        showPeople(employees);
-    }
-
     private void viewPeople() {
         System.out.println("""
                 1. View all customers\s
@@ -229,9 +199,9 @@ public class ConsoleInterface {
                 3. View all people\s
                 4. Back to main menu""");
         switch (takeIntInput(1,4, "Enter choice")) {
-            case 1 -> viewCustomers();
-            case 2 -> viewEmployees();
-            case 3 -> viewAllPeople();
+            case 1 -> showPeople(personService.getAllCustomers());
+            case 2 -> showPeople(personService.getAllEmployees());
+            case 3 -> showPeople(personService.getAllPersons());
         }
     }
 }

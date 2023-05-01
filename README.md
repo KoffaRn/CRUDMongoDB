@@ -11,31 +11,31 @@ Takes id-string and returns document
 Takes id-string and deletes document from collection
 ### getByField(String field, String term)
 takes string field and string term and returns Document[] based on field and term
-###getAll
+### getAll
 returns Document[] of all documents in collection
-###update(String id, Document document)
+### update(String id, Document document)
 Takes string id and document and uptades based on id (removes "_id" from document if it has it to not make duplicates).
 
-##PersonService
+## PersonService
 Business-logic service for Person, Employee and Customer. Uses DBManager with people-collection.
 Explanation of methods:
-###addPerson(Person person)
+### addPerson(Person person)
 Takes person-object as input and adds to database. Checks if the object is customer or employee and inserts relevant info.
-###removePerson(Person person)
+### removePerson(Person person)
 Removes person from collection based on id.
-###getPersonByID(String id)
+### getPersonByID(String id)
 Returns person-object depending on id. If the person is Costumer, returns Customer-object, if employee returns Employee-object, otherwise Person-object.
-###getAllPersons()
+### getAllPersons()
 returns Person[] with all persons in collection.
-###getAllCustomers()
+### getAllCustomers()
 returns Customer[] with all customers in collection using DBManager.getByField
-###getAllEmployees()
+### getAllEmployees()
 returns Employee[] with all employees in collection using DBManager.getByField
-###updateName(Person person, String name)
+### updateName(Person person, String name)
 updates name of person to new name.
-###updateAge(Person person, int age)
+### updateAge(Person person, int age)
 updates age of person to new age.
-###updateAdress(Person person, String adress)
+### updateAdress(Person person, String adress)
 updates adress of person to new adress.
-###updateEmployeeNumber(Employee employee, int emplyeeNumber)
+### updateEmployeeNumber(Employee employee, int emplyeeNumber)
 updates employeenumber of employee to new number

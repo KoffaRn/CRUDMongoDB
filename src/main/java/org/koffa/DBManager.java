@@ -2,7 +2,11 @@ package org.koffa;
 
 import com.mongodb.*;
 import com.mongodb.client.*;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Indexes;
+import com.mongodb.client.model.TextSearchOptions;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 public class DBManager {
@@ -51,18 +55,30 @@ public class DBManager {
 
     public Document[] getByField (String field, String term) {
         Document query = new Document(field, term);
-        FindIterable<Document> documents = collection.find(query);
-        Document[] documentArray = new Document[(int) collection.countDocuments(query)];
-        int i = 0;
-        for (Document document : documents) {
-            documentArray[i] = document;
-            i++;
-        }
-        return documentArray;
+        return findDocuments(query);
     }
 
     public Document read(String id) {
         return collection.find(new Document("_id", new ObjectId(id))).first();
+    }
+    public Document[] search(String field, String term) {
+        collection.createIndex(Indexes.text(field));
+        TextSearchOptions options = new TextSearchOptions().caseSensitive(false);
+        Bson filter = Filters.text(term, options);
+        Document[] documentArray = findDocuments(filter);
+        collection.dropIndexes();
+        return documentArray;
+    }
+
+    private Document[] findDocuments(Bson filter) {
+        FindIterable<Document> documents = collection.find(filter);
+        Document[] documentArray = new Document[(int) collection.countDocuments(filter)];
+        int i = 0;
+        for(Document document : documents) {
+            documentArray[i] = document;
+            i++;
+        }
+        return documentArray;
     }
 
     public void update (String id, Document document) {

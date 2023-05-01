@@ -82,7 +82,16 @@ public class PersonService {
     public void removePerson(Person person) {
         dbManager.delete(person.getId());
     }
-
+    public Person[] search(String field, String term) {
+        Document[] documents = dbManager.search(field,term);
+        Person[] persons = new Person[documents.length];
+        int i = 0;
+        for(Document document : documents) {
+            persons[i] = getPersonByID(String.valueOf(document.getObjectId("_id")));
+            i++;
+        }
+        return persons;
+    }
     public void updateAdress(Person person, String adress) {
         Document document = documentFromPerson(person);
         document.replace("adress",adress);

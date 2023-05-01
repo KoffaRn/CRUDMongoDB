@@ -19,14 +19,33 @@ public class ConsoleInterface {
         System.out.println("""
                 1. Create person\s
                 2. View, update & delete people\s
-                3. Drop cluster (remove all people)\s
-                4. Quit""");
-        switch (takeIntInput(1, 4, "Enter choice")) {
+                3. Search people\s
+                4. Drop cluster (remove all people)\s
+                5. Quit""");
+        switch (takeIntInput(1, 5, "Enter choice")) {
             case 1 -> addNewPerson();
             case 2 -> viewPeople();
-            case 3 -> dropCluster();
-            case 4 -> running = false;
+            case 3 -> searchPeople();
+            case 4 -> dropCluster();
+            case 5 -> running = false;
         }
+    }
+
+    private void searchPeople() {
+        System.out.println("""
+                1. Search by name\s
+                2. Search by adress\s
+                3. Back to main menu
+                """);
+        switch (takeIntInput(1,3, "Enter choice:")) {
+            case 1 -> search("name", takeStringInput("Enter name:"));
+            case 2 -> search("adress", takeStringInput("Enter adress:"));
+            case 3 -> printMainMenu();
+        }
+    }
+    private void search(String field, String term) {
+        Person[] result = personService.search(field, term);
+        showPeople(result);
     }
     private void addNewPerson() {
         System.out.println("""
@@ -176,6 +195,10 @@ public class ConsoleInterface {
     }
     private void viewAllPeople() {
         Person[] people = personService.getAllPersons();
+        showPeople(people);
+    }
+
+    private void showPeople(Person[] people) {
         int i = 1;
         for(Person person : people) {
             System.out.println(i + ". " + person.getName());
@@ -190,33 +213,13 @@ public class ConsoleInterface {
     }
 
     private void viewCustomers() {
-        int i = 1;
         Customer[] customers = personService.getAllCustomers();
-        for(Customer customer : customers) {
-            System.out.println(i + ". " + customer.getName());
-            i++;
-        }
-        System.out.println(i + ". Exit to main menu");
-        int choice = takeIntInput(1, i, "Enter choice:");
-        if(choice == i) printMainMenu();
-        else {
-            showPersonDetails(customers[choice-1]);
-        }
+        showPeople(customers);
     }
 
     private void viewEmployees() {
-        int i = 1;
         Employee[] employees = personService.getAllEmployees();
-        for(Employee employee : employees) {
-            System.out.println(i + ". " + employee.getName());
-            i++;
-        }
-        System.out.println(i + ". Exit to main menu");
-        int choice = takeIntInput(1, i, "Enter choice");
-        if(choice == i) printMainMenu();
-        else {
-            showPersonDetails(employees[choice-1]);
-        }
+        showPeople(employees);
     }
 
     private void viewPeople() {

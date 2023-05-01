@@ -39,3 +39,5 @@ updates age of person to new age.
 updates adress of person to new adress.
 ### updateEmployeeNumber(Employee employee, int emplyeeNumber)
 updates employeenumber of employee to new number
+### updateCustomerNumber(Customer customer, int customerNumber)
+Updates customernumber of customer to new number

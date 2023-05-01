@@ -3,13 +3,13 @@ A simple CRUD for a Person-cluster with employees and customers.
 ## DBManager
 Manager for the MongoDB described in mongodb.config, takes string dbName and string collectionName as inputs to decide which db and collection to manage.
 Explanation for the methods and calls to collection.
-###create(Document)
+### create(Document)
 takes document as input and inserts into collection
-###read(String id)
+### read(String id)
 Takes id-string and returns document
-###delete(String id)
+### delete(String id)
 Takes id-string and deletes document from collection
-###getByField(String field, String term)
+### getByField(String field, String term)
 takes string field and string term and returns Document[] based on field and term
 ###getAll
 returns Document[] of all documents in collection

@@ -7,10 +7,13 @@ import org.koffa.Person.PersonService;
 import java.util.Scanner;
 
 public class ConsoleInterface {
-    private boolean running = true;
     private final PersonService personService;
+    private boolean running = true;
     public ConsoleInterface() {
         this.personService = new PersonService();
+    }
+    public boolean isRunning() {
+        return running;
     }
     public void printMainMenu() {
         System.out.println("""
@@ -25,14 +28,6 @@ public class ConsoleInterface {
             case 4 -> running = false;
         }
     }
-
-    private void dropCluster() {
-        if(takeStringInput("Are you sure? yes/no").equalsIgnoreCase("yes")) {
-            personService.removeCluster();
-        }
-        else printMainMenu();
-    }
-
     private void addNewPerson() {
         System.out.println("""
                 1. Add new customer\s
@@ -46,16 +41,17 @@ public class ConsoleInterface {
             case 4 -> printMainMenu();
         }
     }
-    private Person personBuilder() {
-        Person person = new Person();
-        setPersonAttributes(person);
-        return person;
-    }
     private Customer customerBuilder() {
         Customer customer = new Customer();
         setPersonAttributes(customer);
         setCustomerAttributes(customer);
         return customer;
+    }
+    private void dropCluster() {
+        if(takeStringInput("Are you sure? yes/no").equalsIgnoreCase("yes")) {
+            personService.removeCluster();
+        }
+        else printMainMenu();
     }
     private Employee employeeBuilder() {
         Employee employee = new Employee();
@@ -63,10 +59,13 @@ public class ConsoleInterface {
         setEmployeeAttributes(employee);
         return employee;
     }
-    private void setPersonAttributes(Person person) {
-        person.setName(takeStringInput("Enter name:"));
-        person.setAge(takeIntInput(0,150, "Enter age (0 - 150):"));
-        person.setAdress(takeStringInput("Enter adress:"));
+    private Person personBuilder() {
+        Person person = new Person();
+        setPersonAttributes(person);
+        return person;
+    }
+    private void removePerson(Person person) {
+        personService.removePerson(person);
     }
     private void setCustomerAttributes(Customer customer) {
         customer.setCustomerNumber(takeIntInput(0,Integer.MAX_VALUE, "Enter customer number:"));
@@ -74,62 +73,10 @@ public class ConsoleInterface {
     private void setEmployeeAttributes(Employee employee) {
         employee.setEmployeeNumber(takeIntInput(0,Integer.MAX_VALUE, "Enter employee number:"));
     }
-    private void viewPeople() {
-        System.out.println("""
-                1. View all customers\s
-                2. View all employees\s
-                3. View all people\s
-                4. Back to main menu""");
-        switch (takeIntInput(1,4, "Enter choice")) {
-            case 1 -> viewCustomers();
-            case 2 -> viewEmployees();
-            case 3 -> viewAllPeople();
-        }
-    }
-
-    private void viewAllPeople() {
-        Person[] people = personService.getAllPersons();
-        int i = 1;
-        for(Person person : people) {
-            System.out.println(i + ". " + person.getName());
-            i++;
-        }
-        System.out.println(i + ". Exit to main menu");
-        int choice = takeIntInput(1, i, "Enter choice");
-        if(choice == i) printMainMenu();
-        else {
-            showPersonDetails(people[choice-1]);
-        }
-    }
-
-    private void viewEmployees() {
-        int i = 1;
-        Employee[] employees = personService.getAllEmployees();
-        for(Employee employee : employees) {
-            System.out.println(i + ". " + employee.getName());
-            i++;
-        }
-        System.out.println(i + ". Exit to main menu");
-        int choice = takeIntInput(1, i, "Enter choice");
-        if(choice == i) printMainMenu();
-        else {
-            showPersonDetails(employees[choice-1]);
-        }
-    }
-
-    private void viewCustomers() {
-        int i = 1;
-        Customer[] customers = personService.getAllCustomers();
-        for(Customer customer : customers) {
-            System.out.println(i + ". " + customer.getName());
-            i++;
-        }
-        System.out.println(i + ". Exit to main menu");
-        int choice = takeIntInput(1, i, "Enter choice:");
-        if(choice == i) printMainMenu();
-        else {
-            showPersonDetails(customers[choice-1]);
-        }
+    private void setPersonAttributes(Person person) {
+        person.setName(takeStringInput("Enter name:"));
+        person.setAge(takeIntInput(0,150, "Enter age (0 - 150):"));
+        person.setAdress(takeStringInput("Enter adress:"));
     }
     private void showPersonDetails(Person person) {
         if(person instanceof Customer) {
@@ -155,8 +102,39 @@ public class ConsoleInterface {
             case 3 -> printMainMenu();
         }
     }
-    private void removePerson(Person person) {
-        personService.removePerson(person);
+    private int takeIntInput(int min, int max, String prompt) {
+        int value;
+        Scanner sc = new Scanner(System.in);
+        do {
+            System.out.println(prompt);
+            try {
+                value = sc.nextInt();
+            } catch (Exception e) {
+                value = takeIntInput(min, max, prompt);
+            }
+        }
+        while (value < min || value > max);
+        return value;
+    }
+    private String takeStringInput(String prompt) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println(prompt);
+        return sc.nextLine();
+    }
+    private void updateAdress(Person person) {
+        personService.updateAdress(person, takeStringInput("Enter adress:"));
+    }
+    private void updateAge(Person person) {
+        personService.updateAge(person, takeIntInput(1, 150, "Enter age (0-150):"));
+    }
+    private void updateCustomerNumber(Customer customer) {
+        personService.updateCustomerNumber(customer, takeIntInput(0, Integer.MAX_VALUE, "Enter customer number:"));
+    }
+    private void updateEmployeeNumber(Employee employee) {
+        personService.updateEmployeeNumber(employee, takeIntInput(0, Integer.MAX_VALUE, "Enter employee number:"));
+    }
+    private void updateName(Person person) {
+        personService.updateName(person, takeStringInput("Enter new name:"));
     }
     private void updatePerson(Person person) {
         System.out.println("""
@@ -196,41 +174,61 @@ public class ConsoleInterface {
             }
         }
     }
-    private void updateName(Person person) {
-        personService.updateName(person, takeStringInput("Enter new name:"));
-    }
-    private void updateAge(Person person) {
-        personService.updateAge(person, takeIntInput(1, 150, "Enter age (0-150):"));
-    }
-    private void updateAdress(Person person) {
-        personService.updateAdress(person, takeStringInput("Enter adress:"));
-    }
-    private void updateCustomerNumber(Customer customer) {
-        personService.updateCustomerNumber(customer, takeIntInput(0, Integer.MAX_VALUE, "Enter customer number:"));
-    }
-    private void updateEmployeeNumber(Employee employee) {
-        personService.updateEmployeeNumber(employee, takeIntInput(0, Integer.MAX_VALUE, "Enter employee number:"));
-    }
-    public boolean isRunning() {
-        return running;
-    }
-    private int takeIntInput(int min, int max, String prompt) {
-        int value;
-        Scanner sc = new Scanner(System.in);
-        do {
-            System.out.println(prompt);
-            try {
-                value = sc.nextInt();
-            } catch (Exception e) {
-                value = takeIntInput(min, max, prompt);
-            }
+    private void viewAllPeople() {
+        Person[] people = personService.getAllPersons();
+        int i = 1;
+        for(Person person : people) {
+            System.out.println(i + ". " + person.getName());
+            i++;
         }
-        while (value < min || value > max);
-        return value;
+        System.out.println(i + ". Exit to main menu");
+        int choice = takeIntInput(1, i, "Enter choice");
+        if(choice == i) printMainMenu();
+        else {
+            showPersonDetails(people[choice-1]);
+        }
     }
-    private String takeStringInput(String prompt) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println(prompt);
-        return sc.nextLine();
+
+    private void viewCustomers() {
+        int i = 1;
+        Customer[] customers = personService.getAllCustomers();
+        for(Customer customer : customers) {
+            System.out.println(i + ". " + customer.getName());
+            i++;
+        }
+        System.out.println(i + ". Exit to main menu");
+        int choice = takeIntInput(1, i, "Enter choice:");
+        if(choice == i) printMainMenu();
+        else {
+            showPersonDetails(customers[choice-1]);
+        }
+    }
+
+    private void viewEmployees() {
+        int i = 1;
+        Employee[] employees = personService.getAllEmployees();
+        for(Employee employee : employees) {
+            System.out.println(i + ". " + employee.getName());
+            i++;
+        }
+        System.out.println(i + ". Exit to main menu");
+        int choice = takeIntInput(1, i, "Enter choice");
+        if(choice == i) printMainMenu();
+        else {
+            showPersonDetails(employees[choice-1]);
+        }
+    }
+
+    private void viewPeople() {
+        System.out.println("""
+                1. View all customers\s
+                2. View all employees\s
+                3. View all people\s
+                4. Back to main menu""");
+        switch (takeIntInput(1,4, "Enter choice")) {
+            case 1 -> viewCustomers();
+            case 2 -> viewEmployees();
+            case 3 -> viewAllPeople();
+        }
     }
 }

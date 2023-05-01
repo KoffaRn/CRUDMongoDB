@@ -19,7 +19,6 @@ public class ConfigManager {
         if(!url.isBlank()) tmpUrl += url;
         else tmpUrl += "localhost:27017";
         this.connectionUrl = tmpUrl;
-        System.out.println(connectionUrl);
     }
     public String getConnectionUrl() {
         return connectionUrl;

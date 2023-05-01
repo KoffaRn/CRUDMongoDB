@@ -1,0 +1,3 @@
+username=username
+password=password
+url=clusterX.xyz.mongodb.net/?retryWrites=true&w=majority

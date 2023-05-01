@@ -7,6 +7,8 @@ Explanation for the public methods and calls to collection.
 takes document as input and inserts into collection
 ### read(String id)
 Takes id-string and returns document
+### search(String field, String term)
+Searches collection for term in field and returns Document[].
 ### delete(String id)
 Takes id-string and deletes document from collection
 ### getByField(String field, String term)
@@ -31,6 +33,8 @@ returns Person[] with all persons in collection.
 returns Customer[] with all customers in collection using DBManager.getByField
 ### getAllEmployees()
 returns Employee[] with all employees in collection using DBManager.getByField
+### search(String field, String term)
+returns Person[] with search term in field.
 ### updateName(Person person, String name)
 updates name of person to new name.
 ### updateAge(Person person, int age)

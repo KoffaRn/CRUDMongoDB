@@ -76,7 +76,7 @@ public class PersonService {
     }
 
     public void removeCluster() {
-        dbManager.dropCluster();
+        dbManager.dropCollection();
     }
 
     public void removePerson(Person person) {

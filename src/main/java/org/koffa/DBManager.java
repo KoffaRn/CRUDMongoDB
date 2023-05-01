@@ -38,7 +38,7 @@ public class DBManager {
         collection.deleteOne(new Document("_id", new ObjectId(id)));
     }
 
-    public void dropCluster() {
+    public void dropCollection() {
         collection.drop();
     }
 

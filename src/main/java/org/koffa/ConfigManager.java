@@ -9,15 +9,18 @@ public class ConfigManager {
         String username = readConfig("username");
         String password = readConfig("password");
         String url = readConfig("url");
-        if(!username.isBlank()) {
-            tmpUrl += username;
-            if(!password.isBlank()){
-                tmpUrl += ":" + password;
+        if(username != null) {
+            if(!username.isBlank())tmpUrl += username;
+            if(password != null){
+                if(!password.isBlank()) tmpUrl += ":" + password + "@";
+                else tmpUrl += "@";
             }
-            tmpUrl += "@";
         }
-        if(!url.isBlank()) tmpUrl += url;
-        else tmpUrl += "localhost:27017";
+        if(url != null) {
+            if(!url.isBlank()) tmpUrl += url;
+            else tmpUrl = "mongodb://localhost:27017";
+        }
+        else tmpUrl = "mongodb://localhost:27017";
         this.connectionUrl = tmpUrl;
     }
     public String getConnectionUrl() {
@@ -29,7 +32,7 @@ public class ConfigManager {
             FileReader fr = new FileReader("mongodb.config");
             properties.load(fr);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Could not read config file");
         }
         return properties.getProperty(property);
     }

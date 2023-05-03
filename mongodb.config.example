@@ -1,3 +1,9 @@
+# Config file for Mongo-db connection
+# Replace the username and password with your own
+# Replace the clusterX with your own cluster name
+# Replace the xyz with your own region
+# Replace the majority with your own replica set name
+# If blank will fallback to localhost:27017
 username=username
 password=password
 url=clusterX.xyz.mongodb.net/?retryWrites=true&w=majority

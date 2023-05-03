@@ -7,9 +7,8 @@ public class PersonService {
 
     public PersonService() {
         String collectionName = "people";
-        this.dbManager = new DBManager("Cluster0", collectionName);
+        this.dbManager = new DBManager(collectionName);
     }
-
     /**
      * Creates a new person in the database
      * @param person to add

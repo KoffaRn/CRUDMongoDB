@@ -12,15 +12,15 @@ public class DBManager {
     private final String dbName;
     MongoCollection<Document> collection;
 
-    public DBManager (String dbName, String collectionName) {
-        this.dbName = dbName;
+    public DBManager (String collectionName) {
         ConfigManager cm = new ConfigManager();
+        this.dbName = cm.getCluster();
         String connectionUrl = cm.getConnectionUrl();
         MongoDatabase database = getDatabase(connectionUrl);
         try {
             if (database != null) database.createCollection(collectionName);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Collection already exists");
         }
         assert database != null;
         collection = database.getCollection(collectionName);
@@ -39,6 +39,7 @@ public class DBManager {
      */
     public void create (Document document) {
         try {
+            document.remove("_id");
             collection.insertOne(document);
         } catch (Exception e) {
             e.printStackTrace();

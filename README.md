@@ -1,5 +1,6 @@
 # CRUDMongoDB
 A simple CRUD using MongoDB and Java. Built with Maven.
+Change mongodb.config.example to mongodb.config and change the values to your own.
 
 + DBManager.java: Class that manages the connection with the database.
   + create(Document document): Creates a new document in the database.  

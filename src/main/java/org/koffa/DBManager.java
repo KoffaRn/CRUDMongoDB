@@ -20,7 +20,6 @@ public class DBManager {
         try {
             if (database != null) database.createCollection(collectionName);
         } catch (Exception e) {
-            System.out.println("Collection already exists");
         }
         assert database != null;
         collection = database.getCollection(collectionName);

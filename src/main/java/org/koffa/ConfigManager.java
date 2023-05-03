@@ -31,7 +31,6 @@ public class ConfigManager {
             else tmpUrl = "mongodb://localhost:27017";
         }
         else tmpUrl = "mongodb://localhost:27017";
-        System.out.println(tmpUrl);
         this.connectionUrl = tmpUrl;
     }
     public String getConnectionUrl() {

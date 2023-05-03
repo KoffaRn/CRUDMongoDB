@@ -9,6 +9,9 @@ public class PersonFactory {
             } else if(type.equals("customer")) {
                 return new Customer().fromDocument(document);
             }
+            else {
+                return new Person().fromDocument(document);
+            }
         }
         return new Person().fromDocument(document);
     }

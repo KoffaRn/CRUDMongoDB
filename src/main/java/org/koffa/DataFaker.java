@@ -7,8 +7,9 @@ import org.koffa.People.Person;
 import org.koffa.People.PersonService;
 
 public class DataFaker extends Faker {
+    PersonService personService;
     public DataFaker() {
-
+        this.personService = new PersonService();
     }
     private Customer[] generateCustomers(int amount) {
         Customer[] customers = new Customer[amount];
@@ -23,7 +24,6 @@ public class DataFaker extends Faker {
     }
     public void generateCustomersToDB(int amount) {
         Customer[] customers = generateCustomers(amount);
-        PersonService personService = new PersonService();
         for(Customer customer : customers) {
             personService.addPerson(customer);
         }
@@ -41,7 +41,6 @@ public class DataFaker extends Faker {
     }
     public void generateEmployeesToDB(int amount) {
         Employee[] employees = generateEmployees(amount);
-        PersonService personService = new PersonService();
         for(Employee employee : employees) {
             personService.addPerson(employee);
         }
@@ -58,7 +57,6 @@ public class DataFaker extends Faker {
     }
     public void generatePeopleToDB(int amount) {
         Person[] people = generatePeople(amount);
-        PersonService personService = new PersonService();
         for(Person person : people) {
             personService.addPerson(person);
         }

@@ -22,6 +22,7 @@ public class DBManager {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        assert database != null;
         collection = database.getCollection(collectionName);
         try {
             collection.createIndex(Indexes.compoundIndex(Indexes.text("name"),Indexes.text("adress")));
@@ -63,7 +64,7 @@ public class DBManager {
      * Returns all documents from the collection
      * @return All documents from the collection
      */
-    public Document[] getAll() {
+    public Document[] readAll() {
         FindIterable<Document> documents = collection.find();
         Document[] documentArray = new Document[(int) collection.countDocuments()];
         int i = 0;
@@ -80,7 +81,7 @@ public class DBManager {
      * @param term The term to be searched
      * @return All documents from the collection that match the field and term
      */
-    public Document[] getByField (String field, String term) {
+    public Document[] readByField(String field, String term) {
         Document query = new Document(field, term);
         return findDocuments(query);
     }

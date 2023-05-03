@@ -21,11 +21,11 @@ public class PersonService {
      * Gets all persons from the database
      * @return Person[] of all persons
      */
-    public Person[] getPeopleFromDocs() {
-        return getPeopleFromDocs(dbManager.getAll());
+    public Person[] getAllPeople() {
+        return getPeopleFromDocs(dbManager.readAll());
     }
-    public Person[] getPeopleFromDocs(String field, String value) {
-        return getPeopleFromDocs(dbManager.getByField(field,value));
+    public Person[] getPeopleByFieldValue(String field, String value) {
+        return getPeopleFromDocs(dbManager.readByField(field,value));
     }
 
     /**

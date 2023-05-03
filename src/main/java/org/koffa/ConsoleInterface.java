@@ -230,9 +230,9 @@ public class ConsoleInterface {
                 3. View all people\s
                 4. Back to main menu""");
         switch (takeIntInput(1,4, "Enter choice")) {
-            case 1 -> showPeople(personService.getPeopleFromDocs("type", "customer"));
-            case 2 -> showPeople(personService.getPeopleFromDocs("type", "employee"));
-            case 3 -> showPeople(personService.getPeopleFromDocs());
+            case 1 -> showPeople(personService.getPeopleByFieldValue("type", "customer"));
+            case 2 -> showPeople(personService.getPeopleByFieldValue("type", "employee"));
+            case 3 -> showPeople(personService.getAllPeople());
         }
     }
 }

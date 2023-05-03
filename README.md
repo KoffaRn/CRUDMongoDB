@@ -1,49 +1,14 @@
 # CRUDMongoDB
-A simple CRUD for a Person-cluster with employees and customers. Uses MongoDB as database.
-Built with Maven and Java 20.
+A simple CRUD using MongoDB and Java. Built with Maven.
 
-## DBManager
-Class for managing database. Uses MongoDB and MongoClient. Has methods for CRUD-operations.
-+ create(Document)
-takes document as input and inserts into collection
-+ read(String id)
-Takes id-string and returns document
-+ search(String field, String term)
-Searches collection for term in field and returns Document[].
-+ delete(String id)
-Takes id-string and deletes document from collection
-+ getByField(String field, String term)
-takes string field and string term and returns Document[] based on field and term
-+ getAll
-returns Document[] of all documents in collection
-+ update(String id, Document document)
-Takes string id and document and updates based on id (removes "_id" from document if it has it to not make duplicates).
-
-## PersonService
-Business-logic service for Person, Employee and Customer. Uses DBManager with people-collection.
-
-Explanation of public methods:
-+ addPerson(Person person)
-Takes person-object as input and adds to database. Checks if the object is customer or employee and inserts relevant info.
-+ removePerson(Person person)
-Removes person from collection based on id.
-+ getPersonByID(String id)
-Returns person-object depending on id. If the person is Costumer, returns Customer-object, if employee returns Employee-object, otherwise Person-object.
-+ getAllPersons()
-returns Person[] with all persons in collection.
-+ getAllCustomers()
-returns Customer[] with all customers in collection using DBManager.getByField
-+ getAllEmployees()
-returns Employee[] with all employees in collection using DBManager.getByField
-+ search(String field, String term)
-returns Person[] with search term in field.
-+ updateName(Person person, String name)
-updates name of person to new name.
-+ updateAge(Person person, int age)
-updates age of person to new age.
-+ updateAdress(Person person, String adress)
-updates adress of person to new adress.
-+ updateEmployeeNumber(Employee employee, int emplyeeNumber)
-updates employeenumber of employee to new number
-+ updateCustomerNumber(Customer customer, int customerNumber)
-Updates customernumber of customer to new number
++ DBManager.java: Class that manages the connection with the database.
+  + create(Document document): Creates a new document in the database.  
+  + read(String key, String value): Reads a document from the database.
+  + update(String key, String value, Document document): Updates a document from the database.
+  + delete(String key, String value): Deletes a document from the database.
+  + readAll(): Reads all the documents from the database.
+  + search(String key, String value / int value): Searches a document from the database.
+  + dropCollection(): Deletes the collection from the database.
++ PersonService.java: Class that manages the CRUD operations.
+  + addPerson(Person person): Adds a new person to the database.
+  + getPeopleFromDocs

@@ -35,6 +35,10 @@ public class Employee extends Person {
         .append("_id", getId());
     }
     @Override
+    public String getType() {
+        return "employee";
+    }
+    @Override
     public String toString() {
         return """
                 Employee

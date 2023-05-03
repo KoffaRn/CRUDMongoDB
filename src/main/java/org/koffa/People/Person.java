@@ -65,6 +65,10 @@ public class Person {
         doc.append("_id", getId());
         return doc;
     }
+    public String getType() {
+        return "person";
+    }
+    @Override
     public String toString() {
         return """
                 Person

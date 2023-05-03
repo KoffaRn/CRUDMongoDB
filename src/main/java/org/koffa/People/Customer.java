@@ -36,6 +36,10 @@ public class Customer extends Person{
         return doc;
     }
     @Override
+    public String getType() {
+        return "customer";
+    }
+    @Override
     public String toString() {
         return """
                 Customer

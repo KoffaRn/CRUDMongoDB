@@ -15,57 +15,17 @@ public class PersonService {
      * @param person to add
      */
     public void addPerson(Person person) {
-        Document document = new Document("name", person.getName())
-                .append("age", person.getAge())
-                .append("adress", person.getAdress());
-        if(person instanceof Customer) {
-            document.append("type", "customer");
-            document.append("customer_number", ((Customer) person).getCustomerNumber());
-        }
-        if(person instanceof Employee) {
-            document.append("type", "employee");
-            document.append("employee_number", ((Employee) person).getEmployeeNumber());
-        }
-        dbManager.create(document);
+        dbManager.create(person.toDocument());
     }
-
-    /**
-     * Gets all customers from the database
-     * @return Customer[] of all customers
-     */
-    public Customer[] getAllCustomers() {
-        Document[] documents = dbManager.getByField("type", "customer");
-        Customer[] customers = new Customer[documents.length];
-        int i = 0;
-        for(Document document : documents) {
-            customers[i] = new Customer().fromDocument(document);
-            i++;
-        }
-        return customers;
-    }
-
-    /**
-     * Gets all employees from the database
-     * @return Employee[] of all employees
-     */
-    public Employee[] getAllEmployees() {
-        Document[] documents = dbManager.getByField("type", "employee");
-        Employee[] employees = new Employee[documents.length];
-        int i = 0;
-        for(Document document : documents) {
-            employees[i] = new Employee().fromDocument(document);
-            i++;
-        }
-        return employees;
-    }
-
     /**
      * Gets all persons from the database
      * @return Person[] of all persons
      */
-    public Person[] getAllPersons() {
-        Document[] documents = dbManager.getAll();
-        return getPeople(documents);
+    public Person[] getPeopleFromDocs() {
+        return getPeopleFromDocs(dbManager.getAll());
+    }
+    public Person[] getPeopleFromDocs(String field, String value) {
+        return getPeopleFromDocs(dbManager.getByField(field,value));
     }
 
     /**
@@ -75,20 +35,7 @@ public class PersonService {
      */
     public Person getPersonByID(String id) {
         Document document = dbManager.read(id);
-        if(document.getString("type") != null) {
-            switch(document.getString("type")) {
-                case "customer" -> {
-                    return new Customer().fromDocument(document);
-                }
-                case "employee" -> {
-                    return new Employee().fromDocument(document);
-                }
-                default -> {
-                    return new Person().fromDocument(document);
-                }
-            }
-        }
-        return new Person().fromDocument(document);
+        return PersonFactory.createPerson(document);
     }
 
     /**
@@ -114,14 +61,13 @@ public class PersonService {
      */
     public Person[] search(String field, String term) {
         Document[] documents = dbManager.search(field,term);
-        return getPeople(documents);
+        return getPeopleFromDocs(documents);
     }
     public Person[]search(String field, int value) {
         Document[] documents = dbManager.search(field,value);
-        return getPeople(documents);
+        return getPeopleFromDocs(documents);
     }
-
-    private Person[] getPeople(Document[] documents) {
+    private Person[] getPeopleFromDocs(Document[] documents) {
         Person[] persons = new Person[documents.length];
         int i = 0;
         for(Document document : documents) {
@@ -148,5 +94,4 @@ public class PersonService {
     private void updatePerson(Person person, Document document) {
         dbManager.update(person.getId(), document);
     }
-
 }
